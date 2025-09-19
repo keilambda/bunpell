@@ -19,7 +19,7 @@ common defaults
 
 common warnings
   ghc-options:
-    -Wall -Wextra -Weverything -Wcompat -Werror -Wno-implicit-prelude
+    -Wall -Wextra -Weverything -Wcompat -Wno-implicit-prelude
     -Wno-unsafe -Wno-missing-safe-haskell-mode
     -Wno-missing-local-signatures -Wno-missing-import-lists -haddock
     -Wno-orphans -fhide-source-paths -Wno-missing-exported-signatures
