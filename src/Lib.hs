@@ -13,7 +13,7 @@ data Tense
   | NonPast
 
 data Particle
-  = Wa -- は
+  = Ha -- は
   | Ga -- が
   | Wo -- を
   | He -- へ
