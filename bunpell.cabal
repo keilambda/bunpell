@@ -1,0 +1,64 @@
+cabal-version: 3.0
+name:          bunpell
+version:       0.0.0.0
+license:       BSD-3-Clause
+license-file:  LICENSE
+build-type:    Simple
+
+common defaults
+  default-language:   GHC2024
+  default-extensions:
+    BlockArguments
+    DeriveAnyClass
+    DuplicateRecordFields
+    FunctionalDependencies
+    MonoLocalBinds
+    MultilineStrings
+    NoFieldSelectors
+    OrPatterns
+
+common warnings
+  ghc-options:
+    -Wall -Wextra -Weverything -Wcompat -Werror -Wno-implicit-prelude
+    -Wno-unsafe -Wno-missing-safe-haskell-mode
+    -Wno-missing-local-signatures -Wno-missing-import-lists -haddock
+    -Wno-orphans -fhide-source-paths -Wno-missing-exported-signatures
+    -Wno-missing-kind-signatures -Wno-missed-specialisations
+    -Wno-all-missed-specialisations -Wno-safe
+    -Wno-monomorphism-restriction -Wno-prepositive-qualified-module
+    -Wno-unused-packages -Wno-missing-role-annotations
+    -Wno-missing-poly-kind-signatures
+
+common deps
+  build-depends:
+    , base
+    , containers
+    , generic-lens
+    , lens
+    , text
+
+library
+  import:             defaults, warnings, deps
+  hs-source-dirs:     src
+  exposed-modules:
+    Lib
+
+  default-extensions: NoImplicitPrelude
+
+executable bunpell
+  import:         defaults, warnings, deps
+  hs-source-dirs: app
+  main-is:        Main.hs
+  build-depends:  bunpell
+
+test-suite bunpell-test
+  import:         defaults, warnings, deps
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        Main.hs
+  build-depends:
+    , hedgehog
+    , bunpell
+    , tasty
+    , tasty-hedgehog
+    , tasty-hunit
