@@ -4,6 +4,7 @@ module Pre
   , NonEmpty
   , Text
   , IsString
+  , module Data.Foldable
   , module Prettyprinter
   , module Safe
   , module Prelude
@@ -11,6 +12,7 @@ module Pre
   , putPrettyLn
   ) where
 
+import Data.Foldable
 import Data.List (List)
 import Data.List.NonEmpty (NonEmpty)
 import Data.String (IsString)
