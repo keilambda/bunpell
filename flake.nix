@@ -40,6 +40,31 @@
           hpkgs.cabal-add
           hpkgs.haskell-language-server
           hpkgs.fourmolu
+          hpkgs.ghc
+        ];
+
+        commands = [
+          {
+            name = "coverage";
+            command = ''
+              set -euo pipefail
+              cabal test --enable-coverage --test-show-details=streaming
+              cabal run bunpell --enable-coverage || true
+              outdir=coverage/html
+              rm -rf "$outdir"
+              mkdir -p "$outdir"
+              mapfile -t HPCDIRS < <(find dist-newstyle -type d -path '*/hpc/*/mix' | sort -u)
+              while IFS= read -r TIX; do
+                comp=$(basename "$TIX" .tix)
+                dest="$outdir/$comp"
+                echo "Generating HTML for $comp -> $dest"
+                ARGS=()
+                for d in "''${HPCDIRS[@]}"; do ARGS+=("--hpcdir=$d"); done
+                hpc markup "$TIX" "''${ARGS[@]}" --destdir="$dest" || true
+              done < <(find dist-newstyle -name '*.tix' | sort)
+              echo "Coverage HTML written under: $outdir"
+            '';
+          }
         ];
       };
     });
