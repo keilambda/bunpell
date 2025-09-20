@@ -7,8 +7,6 @@ module Lib
   , Sentence (..)
   ) where
 
-import Data.List
-import Data.String (IsString)
 import Pre
 
 data Formality
@@ -32,7 +30,7 @@ data Particle
   deriving stock (Show)
 
 newtype Word = MkWord Text
-  deriving newtype (Show, IsString)
+  deriving newtype (IsString, Show)
 
 data Role
   = Subject Word Particle
