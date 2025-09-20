@@ -37,12 +37,14 @@ common deps
     , generic-lens
     , lens
     , text
+    , validation
 
 library
   import:             defaults, warnings, deps
   hs-source-dirs:     src
   exposed-modules:
     Lib
+    Validate
     Pre
 
   default-extensions: NoImplicitPrelude
