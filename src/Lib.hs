@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Lib
   ( Politeness (..)
   , Tense (..)
@@ -16,10 +14,12 @@ import Pre
 data Politeness
   = Casual
   | Formal
+  deriving stock (Show)
 
 data Tense
   = Past
   | NonPast
+  deriving stock (Show)
 
 data Particle
   = Ha -- は
@@ -29,28 +29,21 @@ data Particle
   | Ni -- に
   | De -- で
   | No -- の
+  deriving stock (Show)
 
 newtype Word = MkWord Text
-  deriving newtype (IsString)
+  deriving newtype (Show, IsString)
 
 data Role
   = Subject Word Particle
   | Topic Word Particle
   | Object Word
   | Verb Word
+  deriving stock (Show)
 
 data Sentence = MkSentence
   { content :: List Role
   , tense :: Tense
   , politeness :: Politeness
   }
-
-foo :: Sentence
-foo = MkSentence{content, tense = NonPast, politeness = Formal}
- where
-  content =
-    [ Subject "私" No
-    , Topic "名前" Ha
-    , Object "ケイ"
-    , Verb "です"
-    ]
+  deriving stock (Show)
