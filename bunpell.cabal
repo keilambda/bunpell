@@ -16,6 +16,7 @@ common defaults
     MultilineStrings
     NoFieldSelectors
     OrPatterns
+    OverloadedRecordDot
 
 common warnings
   ghc-options:
@@ -42,6 +43,7 @@ library
   hs-source-dirs:     src
   exposed-modules:
     Lib
+    Pre
 
   default-extensions: NoImplicitPrelude
 
