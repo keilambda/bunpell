@@ -51,9 +51,19 @@ data Role
   | Verb Word
   deriving stock (Show)
 
+instance Pretty Role where
+  pretty = \case
+    Subject w p -> pretty w <> pretty p
+    Topic w p -> pretty w <> pretty p
+    Object w -> pretty w
+    Verb w -> pretty w
+
 data Sentence = MkSentence
   { content :: List Role
   , tense :: Tense
   , formality :: Formality
   }
   deriving stock (Show)
+
+instance Pretty Sentence where
+  pretty s = hcat (pretty <$> s.content)
