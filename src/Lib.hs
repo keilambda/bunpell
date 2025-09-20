@@ -92,6 +92,7 @@ inferStyle (MkWord t) =
   if
     | suf "です" || suf "ます" -> Just (MkStyle Formal NonPast Positive)
     | suf "でした" || suf "ました" -> Just (MkStyle Formal Past Positive)
+    | suf "ません" -> Just (MkStyle Formal NonPast Negative)
     | suf "だ" -> Just (MkStyle Casual NonPast Positive)
     | suf "だった" -> Just (MkStyle Casual Past Positive)
     | otherwise -> Nothing

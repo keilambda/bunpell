@@ -62,6 +62,7 @@ helpersTests =
         inferStyle "でした" @?= Just (MkStyle Formal Past Positive)
         inferStyle "行きます" @?= Just (MkStyle Formal NonPast Positive)
         inferStyle "行きました" @?= Just (MkStyle Formal Past Positive)
+        inferStyle "行きません" @?= Just (MkStyle Formal NonPast Negative)
         inferStyle "だ" @?= Just (MkStyle Casual NonPast Positive)
         inferStyle "だった" @?= Just (MkStyle Casual Past Positive)
         inferStyle "行く" @?= Nothing
