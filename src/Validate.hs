@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Validate
   ( SentenceError (..)
   , validate
@@ -15,6 +17,15 @@ data SentenceError
   | UnknownVerbForm Word
   | MissingVerb
   deriving stock (Show)
+
+instance Pretty SentenceError where
+  pretty = \case
+    InvalidTopicParticle w p -> "Invalid topic particle" <> colon <+> dquotes (pretty w) <+> dquotes (pretty p)
+    MultipleTopics rs -> "Multiple topics" <> colon <+> hsep (pretty <$> rs)
+    VerbMismatch w expected found ->
+      "Verb mismatch" <> colon <+> dquotes (pretty w) <+> "expected=" <> pretty expected <+> "found=" <> pretty found
+    UnknownVerbForm w -> "Unknown verb form" <> colon <+> dquotes (pretty w)
+    MissingVerb -> "Missing a verb"
 
 type M a = Validation (NonEmpty SentenceError) a
 

@@ -38,6 +38,9 @@ data Style = MkStyle
   }
   deriving stock (Eq, Show)
 
+instance Pretty Style where
+  pretty s = braces $ pretty (show s.formality) <> comma <+> pretty (show s.tense) <> comma <+> pretty (show s.mood)
+
 data Particle
   = Ha
   | Ga

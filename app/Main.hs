@@ -9,7 +9,7 @@ import Validate
 
 main :: IO ()
 main = case validate me of
-  Failure fs -> print fs
+  Failure fs -> traverse_ putPrettyLn fs
   Success s -> putPrettyLn s
 
 me :: Sentence
