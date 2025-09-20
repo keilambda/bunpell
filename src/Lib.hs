@@ -10,7 +10,6 @@ module Lib
   ) where
 
 import Pre
-import Prettyprinter
 
 data Formality
   = Casual
@@ -43,7 +42,7 @@ instance Pretty Particle where
     No -> "の"
 
 newtype Word = MkWord Text
-  deriving newtype (IsString, Show)
+  deriving newtype (IsString, Pretty, Show)
 
 data Role
   = Subject Word Particle
