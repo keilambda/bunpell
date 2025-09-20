@@ -5,6 +5,7 @@ module Pre
   , Text
   , IsString
   , module Prettyprinter
+  , module Safe
   , module Prelude
   , renderText
   , putPrettyLn
@@ -18,6 +19,7 @@ import Data.Text.IO qualified as Text
 import GHC.Generics (Generic)
 import Prettyprinter
 import Prettyprinter.Render.Text (renderStrict)
+import Safe
 import Prelude hiding (Word)
 
 renderText :: (Pretty a) => a -> Text

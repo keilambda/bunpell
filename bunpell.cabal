@@ -39,6 +39,7 @@ common deps
     , text
     , validation
     , prettyprinter
+    , safe
 
 library
   import:             defaults, warnings, deps
