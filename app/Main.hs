@@ -2,11 +2,15 @@
 
 module Main (main) where
 
+import Data.Validation (Validation (..))
 import Lib
+import Pre
 import Validate
 
 main :: IO ()
-main = print (validate me)
+main = case validate me of
+  Failure fs -> print fs
+  Success s -> putPrettyLn s
 
 me :: Sentence
 me = MkSentence{content, tense = NonPast, formality = Formal}
