@@ -7,6 +7,7 @@ module Lib
   , Word (..)
   , Role (..)
   , Sentence (..)
+  , verbOf
   ) where
 
 import Pre
@@ -67,3 +68,6 @@ data Sentence = MkSentence
 
 instance Pretty Sentence where
   pretty s = hcat (pretty <$> s.content)
+
+verbOf :: Sentence -> Maybe Word
+verbOf s = headMay [w | Verb w <- s.content]
