@@ -11,7 +11,7 @@ module Lib
 
 import Data.List
 import Data.String (IsString)
-import Data.Text
+import Pre
 
 data Politeness
   = Casual
