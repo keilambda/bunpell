@@ -3,6 +3,7 @@
 module Lib
   ( Formality (..)
   , Tense (..)
+  , Mood (..)
   , Style (..)
   , Particle (..)
   , Word (..)
@@ -25,9 +26,15 @@ data Tense
   | NonPast
   deriving stock (Eq, Show)
 
+data Mood
+  = Positive
+  | Negative
+  deriving stock (Eq, Show)
+
 data Style = MkStyle
   { formality :: Formality
   , tense :: Tense
+  , mood :: Mood
   }
   deriving stock (Eq, Show)
 
@@ -83,10 +90,10 @@ verbOf rs = headMay [w | Verb w <- rs]
 inferStyle :: Word -> Maybe Style
 inferStyle (MkWord t) =
   if
-    | suf "です" || suf "ます" -> Just (MkStyle Formal NonPast)
-    | suf "でした" || suf "ました" -> Just (MkStyle Formal Past)
-    | suf "だ" -> Just (MkStyle Casual NonPast)
-    | suf "だった" -> Just (MkStyle Casual Past)
+    | suf "です" || suf "ます" -> Just (MkStyle Formal NonPast Positive)
+    | suf "でした" || suf "ました" -> Just (MkStyle Formal Past Positive)
+    | suf "だ" -> Just (MkStyle Casual NonPast Positive)
+    | suf "だった" -> Just (MkStyle Casual Past Positive)
     | otherwise -> Nothing
  where
   suf s = s `isSuffixOf` t
