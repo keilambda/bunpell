@@ -38,6 +38,7 @@ common deps
     , lens
     , text
     , validation
+    , prettyprinter
 
 library
   import:             defaults, warnings, deps

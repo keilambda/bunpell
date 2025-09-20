@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Lib
   ( Formality (..)
   , Tense (..)
@@ -8,6 +10,7 @@ module Lib
   ) where
 
 import Pre
+import Prettyprinter
 
 data Formality
   = Casual
@@ -20,14 +23,24 @@ data Tense
   deriving stock (Show)
 
 data Particle
-  = Ha -- は
-  | Ga -- が
-  | Wo -- を
-  | He -- へ
-  | Ni -- に
-  | De -- で
-  | No -- の
+  = Ha
+  | Ga
+  | Wo
+  | He
+  | Ni
+  | De
+  | No
   deriving stock (Show)
+
+instance Pretty Particle where
+  pretty = \case
+    Ha -> "は"
+    Ga -> "が"
+    Wo -> "を"
+    He -> "へ"
+    Ni -> "に"
+    De -> "で"
+    No -> "の"
 
 newtype Word = MkWord Text
   deriving newtype (IsString, Show)
