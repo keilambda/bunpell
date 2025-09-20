@@ -14,6 +14,7 @@ common defaults
     FunctionalDependencies
     MonoLocalBinds
     MultilineStrings
+    MultiWayIf
     NoFieldSelectors
     OrPatterns
     OverloadedRecordDot

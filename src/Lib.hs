@@ -3,24 +3,33 @@
 module Lib
   ( Formality (..)
   , Tense (..)
+  , Style (..)
   , Particle (..)
   , Word (..)
   , Role (..)
   , Sentence (..)
   , verbOf
+  , inferStyle
   ) where
 
+import Data.Text (isSuffixOf)
 import Pre
 
 data Formality
   = Casual
   | Formal
-  deriving stock (Show)
+  deriving stock (Eq, Show)
 
 data Tense
   = Past
   | NonPast
-  deriving stock (Show)
+  deriving stock (Eq, Show)
+
+data Style = MkStyle
+  { formality :: Formality
+  , tense :: Tense
+  }
+  deriving stock (Eq, Show)
 
 data Particle
   = Ha
@@ -61,13 +70,23 @@ instance Pretty Role where
 
 data Sentence = MkSentence
   { content :: List Role
-  , tense :: Tense
-  , formality :: Formality
+  , style :: Style
   }
   deriving stock (Show)
 
 instance Pretty Sentence where
   pretty s = hcat (pretty <$> s.content)
 
-verbOf :: Sentence -> Maybe Word
-verbOf s = headMay [w | Verb w <- s.content]
+verbOf :: List Role -> Maybe Word
+verbOf rs = headMay [w | Verb w <- rs]
+
+inferStyle :: Word -> Maybe Style
+inferStyle (MkWord t) =
+  if
+    | suf "です" || suf "ます" -> Just (MkStyle Formal NonPast)
+    | suf "でした" || suf "ました" -> Just (MkStyle Formal Past)
+    | suf "だ" -> Just (MkStyle Casual NonPast)
+    | suf "だった" -> Just (MkStyle Casual Past)
+    | otherwise -> Nothing
+ where
+  suf s = s `isSuffixOf` t
