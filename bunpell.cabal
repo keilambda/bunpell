@@ -18,6 +18,7 @@ common defaults
     NoFieldSelectors
     OrPatterns
     OverloadedRecordDot
+    ViewPatterns
 
 common warnings
   ghc-options:
