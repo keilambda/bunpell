@@ -9,7 +9,7 @@ main :: IO ()
 main = print (validate me)
 
 me :: Sentence
-me = MkSentence{content, tense = NonPast, politeness = Formal}
+me = MkSentence{content, tense = NonPast, formality = Formal}
  where
   content =
     [ Subject "私" No

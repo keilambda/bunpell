@@ -1,5 +1,5 @@
 module Lib
-  ( Politeness (..)
+  ( Formality (..)
   , Tense (..)
   , Particle (..)
   , Word (..)
@@ -11,7 +11,7 @@ import Data.List
 import Data.String (IsString)
 import Pre
 
-data Politeness
+data Formality
   = Casual
   | Formal
   deriving stock (Show)
@@ -44,6 +44,6 @@ data Role
 data Sentence = MkSentence
   { content :: List Role
   , tense :: Tense
-  , politeness :: Politeness
+  , formality :: Formality
   }
   deriving stock (Show)
