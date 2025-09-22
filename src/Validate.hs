@@ -6,7 +6,11 @@ module Validate
   ) where
 
 import Data.Functor
+import Data.Proxy
+import Data.Text qualified as Text
 import Data.Validation (Validation (..))
+import GHC.Records
+import GHC.TypeLits
 import Lib
 import Pre
 
@@ -22,10 +26,32 @@ instance Pretty SentenceError where
   pretty = \case
     InvalidTopicParticle w p -> "Invalid topic particle" <> colon <+> dquotes (pretty w) <+> dquotes (pretty p)
     MultipleTopics rs -> "Multiple topics" <> colon <+> hsep (pretty <$> rs)
-    VerbMismatch w expected found ->
-      "Verb mismatch" <> colon <+> dquotes (pretty w) <+> "expected=" <> pretty expected <+> "found=" <> pretty found
+    VerbMismatch w expected found -> do
+      let (expDoc, foundDoc) = diffStyle expected found
+      ("Verb mismatch" <> colon)
+        <+> dquotes (pretty w)
+        <+> ("expected=" <> braces (hsep (punctuate comma expDoc)))
+        <+> ("found=" <> braces (hsep (punctuate comma foundDoc)))
     UnknownVerbForm w -> "Unknown verb form" <> colon <+> dquotes (pretty w)
     MissingVerb -> "Missing a verb"
+   where
+    diffStyle expected found = ([kv k v | (k, v, _) <- diffs], [kv k v | (k, _, v) <- diffs])
+     where
+      diffs = mconcat [diff (Proxy @"formality"), diff (Proxy @"tense"), diff (Proxy @"mood")]
+
+      diff
+        :: forall field a ann
+         . (Eq a, HasField field Style a, KnownSymbol field, Show a)
+        => Proxy field
+        -> List (Text, Doc ann, Doc ann)
+      diff proxy =
+        let expected' = getField @field @Style expected
+            found' = getField @field @Style found
+         in [ (Text.pack (symbolVal proxy), pretty (show expected'), pretty (show found'))
+            | expected' /= found'
+            ]
+
+      kv k v = pretty k <> "=" <> v
 
 type M a = Validation (NonEmpty SentenceError) a
 
