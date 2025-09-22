@@ -10,6 +10,7 @@ import Data.Proxy
 import Data.Text qualified as Text
 import Data.Validation (Validation (..))
 import GHC.Records
+import GHC.Tuple
 import GHC.TypeLits
 import Lib
 import Pre
@@ -43,7 +44,7 @@ instance Pretty SentenceError where
         :: forall field a ann
          . (Eq a, HasField field Style a, KnownSymbol field, Show a)
         => Proxy field
-        -> List (Text, Doc ann, Doc ann)
+        -> List (Tuple3 Text (Doc ann) (Doc ann))
       diff proxy =
         let expected' = getField @field @Style expected
             found' = getField @field @Style found
@@ -55,14 +56,14 @@ instance Pretty SentenceError where
 
 type M a = Validation (NonEmpty SentenceError) a
 
-hasValidTopic :: List Role -> M ()
+hasValidTopic :: List Role -> M Unit
 hasValidTopic rs = case [x | x@(Topic _ _) <- rs] of
   [Topic w p] -> case p of
     Ha; Ga -> Success ()
     _ -> Failure (pure (InvalidTopicParticle w p))
   ts -> Failure (pure (MultipleTopics ts))
 
-hasValidVerb :: Sentence -> M ()
+hasValidVerb :: Sentence -> M Unit
 hasValidVerb s = case verbOf s.content of
   Just w -> case inferStyle w of
     Just style' -> if s.style == style' then Success () else Failure (pure (VerbMismatch w s.style style'))

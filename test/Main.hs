@@ -10,7 +10,7 @@ import Test.Tasty
 import Test.Tasty.HUnit
 import Validate
 
-main :: IO ()
+main :: IO Unit
 main = defaultMain tests
 
 tests :: TestTree

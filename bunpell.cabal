@@ -42,6 +42,7 @@ common deps
     , validation
     , prettyprinter
     , safe
+    , ghc-prim
 
 library
   import:             defaults, warnings, deps

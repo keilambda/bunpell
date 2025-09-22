@@ -7,7 +7,7 @@ import Lib
 import Pre
 import Validate
 
-main :: IO ()
+main :: IO Unit
 main = case validate me of
   Failure fs -> traverse_ putPrettyLn fs
   Success s -> putPrettyLn s
