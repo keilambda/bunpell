@@ -18,6 +18,7 @@ import Pre
 
 data Formality
   = Casual
+  | Polite
   | Formal
   deriving stock (Eq, Show)
 
@@ -93,9 +94,9 @@ verbOf rs = headMay [w | Verb w <- rs]
 inferStyle :: Word -> Maybe Style
 inferStyle (MkWord t) =
   if
-    | suf "です" || suf "ます" -> Just (MkStyle Formal NonPast Positive)
-    | suf "でした" || suf "ました" -> Just (MkStyle Formal Past Positive)
-    | suf "ません" -> Just (MkStyle Formal NonPast Negative)
+    | suf "です" || suf "ます" -> Just (MkStyle Polite NonPast Positive)
+    | suf "でした" || suf "ました" -> Just (MkStyle Polite Past Positive)
+    | suf "ません" -> Just (MkStyle Polite NonPast Negative)
     | suf "だ" -> Just (MkStyle Casual NonPast Positive)
     | suf "だった" -> Just (MkStyle Casual Past Positive)
     | otherwise -> Nothing

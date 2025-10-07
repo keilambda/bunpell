@@ -13,7 +13,7 @@ main = case validate me of
   Success s -> putPrettyLn s
 
 me :: Sentence
-me = MkSentence{content, style = MkStyle{tense = NonPast, formality = Formal, mood = Positive}}
+me = MkSentence{content, style = MkStyle{tense = NonPast, formality = Polite, mood = Positive}}
  where
   content =
     [ Subject "私" No
