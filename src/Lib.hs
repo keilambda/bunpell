@@ -2,6 +2,7 @@
 
 module Lib
   ( Formality (..)
+  , Politeness (..)
   , Tense (..)
   , Mood (..)
   , Style (..)
@@ -18,8 +19,12 @@ import Pre
 
 data Formality
   = Casual
-  | Polite
   | Formal
+  deriving stock (Eq, Show)
+
+data Politeness
+  = Plain
+  | Polite
   deriving stock (Eq, Show)
 
 data Tense
@@ -34,6 +39,7 @@ data Mood
 
 data Style = MkStyle
   { formality :: Formality
+  , politeness :: Politeness
   , tense :: Tense
   , mood :: Mood
   }
@@ -94,11 +100,11 @@ verbOf rs = headMay [w | Verb w <- rs]
 inferStyle :: Word -> Maybe Style
 inferStyle (MkWord t) =
   if
-    | suf "です" || suf "ます" -> Just (MkStyle Polite NonPast Positive)
-    | suf "でした" || suf "ました" -> Just (MkStyle Polite Past Positive)
-    | suf "ません" -> Just (MkStyle Polite NonPast Negative)
-    | suf "だ" -> Just (MkStyle Casual NonPast Positive)
-    | suf "だった" -> Just (MkStyle Casual Past Positive)
+    | suf "です" || suf "ます" -> Just (MkStyle Formal Polite NonPast Positive)
+    | suf "でした" || suf "ました" -> Just (MkStyle Formal Polite Past Positive)
+    | suf "ません" -> Just (MkStyle Formal Polite NonPast Negative)
+    | suf "だ" -> Just (MkStyle Casual Plain NonPast Positive)
+    | suf "だった" -> Just (MkStyle Casual Plain Past Positive)
     | otherwise -> Nothing
  where
   suf s = s `isSuffixOf` t
