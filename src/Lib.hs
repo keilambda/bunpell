@@ -154,8 +154,30 @@ conjugateAdjective s = \case
           Negative -> case s.formality of
             Casual -> stem <> "くないです"
             Formal -> stem <> "くありません"
-  Na (MkWord _w) ->
-    undefined
+  Na (MkWord w) ->
+    pure . Na $ MkWord case s.politeness of
+      Plain -> case s.tense of
+        Past -> case s.mood of
+          Positive -> w <> "だった"
+          Negative -> case s.formality of
+            Casual -> w <> "じゃなかった"
+            Formal -> w <> "ではなかった"
+        NonPast -> case s.mood of
+          Positive -> w <> "だ"
+          Negative -> case s.formality of
+            Casual -> w <> "じゃない"
+            Formal -> w <> "ではない"
+      Polite -> case s.tense of
+        Past -> case s.mood of
+          Positive -> w <> "でした"
+          Negative -> case s.formality of
+            Casual -> w <> "じゃなかったです"
+            Formal -> w <> "ではありませんでした"
+        NonPast -> case s.mood of
+          Positive -> w <> "です"
+          Negative -> case s.formality of
+            Casual -> w <> "じゃないです"
+            Formal -> w <> "ではありません"
 
 inferStyle :: Word -> Maybe Style
 inferStyle (MkWord t) =
