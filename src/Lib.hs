@@ -14,6 +14,7 @@ module Lib
   , Sentence (..)
   , verbOf
   , conjugateVerb
+  , conjugateAdjective
   , inferStyle
   ) where
 
@@ -128,6 +129,28 @@ conjugateVerb s = \case
           Positive -> stem <> "ます"
           Negative -> stem <> "ません"
   Godan (MkWord _w) -> do
+    undefined
+
+conjugateAdjective :: Style -> Adjective -> Maybe Adjective
+conjugateAdjective s = \case
+  I (MkWord w) -> do
+    stem <- if w == "いい" then pure "よ" else stripSuffix "い" w
+    pure . I $ MkWord case s.politeness of
+      Plain -> case s.tense of
+        Past -> case s.mood of
+          Positive -> stem <> "かった"
+          Negative -> stem <> "くなかった"
+        NonPast -> case s.mood of
+          Positive -> w
+          Negative -> stem <> "くない"
+      Polite -> case s.tense of
+        Past -> case s.mood of
+          Positive -> stem <> "かったです"
+          Negative -> stem <> "くありませんでした"
+        NonPast -> case s.mood of
+          Positive -> w <> "です"
+          Negative -> stem <> "くありません"
+  Na (MkWord _w) ->
     undefined
 
 inferStyle :: Word -> Maybe Style
