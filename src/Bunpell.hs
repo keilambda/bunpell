@@ -19,6 +19,7 @@ module Bunpell
   ) where
 
 import Data.Text (isSuffixOf, stripSuffix)
+import Data.Text qualified as Text
 import Pre
 
 data Formality
@@ -128,8 +129,59 @@ conjugateVerb s = \case
         NonPast -> case s.mood of
           Positive -> stem <> "ます"
           Negative -> stem <> "ません"
-  Godan (MkWord _w) -> do
-    undefined
+  Godan (MkWord w) -> do
+    (stem, ending) <- Text.unsnoc w
+    pure . Godan $ MkWord case s.politeness of
+      Plain -> case s.tense of
+        Past -> case s.mood of
+          Positive -> stem <> ta ending
+          Negative -> stem <> a ending <> "なかった"
+        NonPast -> case s.mood of
+          Positive -> w
+          Negative -> stem <> a ending <> "ない"
+      Polite -> case s.tense of
+        Past -> case s.mood of
+          Positive -> stem <> i ending <> "ました"
+          Negative -> stem <> i ending <> "ませんでした"
+        NonPast -> case s.mood of
+          Positive -> stem <> i ending <> "ます"
+          Negative -> stem <> i ending <> "ません"
+ where
+  a = \case
+    'う' -> "わ"
+    'く' -> "か"
+    'ぐ' -> "が"
+    'す' -> "さ"
+    'つ' -> "た"
+    'ぬ' -> "な"
+    'む' -> "ま"
+    'ぶ' -> "ば"
+    'る' -> "ら"
+    _ -> undefined
+
+  i = \case
+    'う' -> "い"
+    'く' -> "き"
+    'ぐ' -> "ぎ"
+    'す' -> "し"
+    'つ' -> "ち"
+    'ぬ' -> "に"
+    'む' -> "み"
+    'ぶ' -> "び"
+    'る' -> "り"
+    _ -> undefined
+
+  ta = \case
+    'う' -> "った"
+    'つ' -> "った"
+    'る' -> "った"
+    'む' -> "んだ"
+    'ぶ' -> "んだ"
+    'ぬ' -> "んだ"
+    'く' -> "いた"
+    'ぐ' -> "いだ"
+    'す' -> "した"
+    _ -> undefined
 
 conjugateAdjective :: Style -> Adjective -> Maybe Adjective
 conjugateAdjective s = \case
