@@ -146,10 +146,14 @@ conjugateAdjective s = \case
       Polite -> case s.tense of
         Past -> case s.mood of
           Positive -> stem <> "かったです"
-          Negative -> stem <> "くありませんでした"
+          Negative -> case s.formality of
+            Casual -> stem <> "くなかったです"
+            Formal -> stem <> "くありませんでした"
         NonPast -> case s.mood of
           Positive -> w <> "です"
-          Negative -> stem <> "くありません"
+          Negative -> case s.formality of
+            Casual -> stem <> "くないです"
+            Formal -> stem <> "くありません"
   Na (MkWord _w) ->
     undefined
 
