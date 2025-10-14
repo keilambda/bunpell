@@ -6,6 +6,7 @@ module Lib
   , Tense (..)
   , Mood (..)
   , Verb (..)
+  , Adjective (..)
   , Style (..)
   , Particle (..)
   , Word (..)
@@ -42,6 +43,10 @@ data Mood
 data Verb
   = Ichidan Word
   | Godan Word
+
+data Adjective
+  = I Word
+  | Na Word
 
 data Style = MkStyle
   { formality :: Formality
