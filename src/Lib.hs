@@ -5,16 +5,18 @@ module Lib
   , Politeness (..)
   , Tense (..)
   , Mood (..)
+  , Verb (..)
   , Style (..)
   , Particle (..)
   , Word (..)
   , Role (..)
   , Sentence (..)
   , verbOf
+  , conjugateVerb
   , inferStyle
   ) where
 
-import Data.Text (isSuffixOf)
+import Data.Text (isSuffixOf, stripSuffix)
 import Pre
 
 data Formality
@@ -36,6 +38,10 @@ data Mood
   = Positive
   | Negative
   deriving stock (Eq, Show)
+
+data Verb
+  = Ichidan Word
+  | Godan Word
 
 data Style = MkStyle
   { formality :: Formality
@@ -96,6 +102,28 @@ instance Pretty Sentence where
 
 verbOf :: List Role -> Maybe Word
 verbOf rs = headMay [w | Verb w <- rs]
+
+conjugateVerb :: Style -> Verb -> Maybe Verb
+conjugateVerb s = \case
+  Ichidan (MkWord w) -> do
+    stem <- stripSuffix "る" w
+    pure . Ichidan $ MkWord case s.politeness of
+      Plain -> case s.tense of
+        Past -> case s.mood of
+          Positive -> stem <> "た"
+          Negative -> stem <> "なかった"
+        NonPast -> case s.mood of
+          Positive -> w
+          Negative -> stem <> "ない"
+      Polite -> case s.tense of
+        Past -> case s.mood of
+          Positive -> stem <> "ました"
+          Negative -> stem <> "ませんでした"
+        NonPast -> case s.mood of
+          Positive -> stem <> "ます"
+          Negative -> stem <> "ません"
+  Godan (MkWord _w) -> do
+    undefined
 
 inferStyle :: Word -> Maybe Style
 inferStyle (MkWord t) =
