@@ -2,9 +2,9 @@
 
 module Main (main) where
 
+import Bunpell
 import Data.List.NonEmpty qualified as NonEmpty
 import Data.Validation (Validation (..))
-import Lib
 import Pre
 import Test.Tasty
 import Test.Tasty.HUnit

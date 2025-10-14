@@ -5,6 +5,7 @@ module Validate
   , validate
   ) where
 
+import Bunpell
 import Data.Functor
 import Data.Proxy
 import Data.Text qualified as Text
@@ -12,7 +13,6 @@ import Data.Validation (Validation (..))
 import GHC.Records
 import GHC.Tuple
 import GHC.TypeLits
-import Lib
 import Pre
 
 data SentenceError

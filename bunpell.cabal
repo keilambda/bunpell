@@ -48,7 +48,7 @@ library
   import:             defaults, warnings, deps
   hs-source-dirs:     src
   exposed-modules:
-    Lib
+    Bunpell
     Validate
     Pre
 

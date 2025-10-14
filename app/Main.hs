@@ -2,8 +2,8 @@
 
 module Main (main) where
 
+import Bunpell
 import Data.Validation (Validation (..))
-import Lib
 import Pre
 import Validate
 
