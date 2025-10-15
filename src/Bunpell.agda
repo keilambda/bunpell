@@ -22,5 +22,30 @@ data Kana : Set where
 
   っ_ : Kana → Kana
 
+  ア_ イ_ ウ_ エ_ オ_ : Kana → Kana
+  カ_ キ_ ク_ ケ_ コ_ : Kana → Kana
+  サ_ シ_ ス_ セ_ ソ_ : Kana → Kana
+  タ_ チ_ ツ_ テ_ ト_ : Kana → Kana
+  ナ_ ニ_ ヌ_ ネ_ ノ_ : Kana → Kana
+  ハ_ ヒ_ フ_ ヘ_ ホ_ : Kana → Kana
+  マ_ ミ_ ム_ メ_ モ_ : Kana → Kana
+  ヤ_ ユ_ ヨ_ : Kana → Kana
+  ラ_ リ_ ル_ レ_ ロ_ : Kana → Kana
+  ワ_ ヲ_ ン_ : Kana → Kana
+
+  ガ_ ギ_ グ_ ゲ_ ゴ_ : Kana → Kana
+  ザ_ ジ_ ズ_ ゼ_ ゾ_ : Kana → Kana
+  ダ_ ヂ_ ヅ_ デ_ ド_ : Kana → Kana
+  バ_ ビ_ ブ_ ベ_ ボ_ : Kana → Kana
+  パ_ ピ_ プ_ ペ_ ポ_ : Kana → Kana
+
+  ャ_ ュ_ ョ_ : Kana → Kana
+
+  ッ_ : Kana → Kana
+
+  ヴ_ : Kana → Kana
+  ァ_ ィ_ ゥ_ ェ_ ォ_ : Kana → Kana
+  ヵ_ ヶ_ : Kana → Kana
+
   、_ : Kana → Kana
   。 : Kana
