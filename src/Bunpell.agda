@@ -50,5 +50,36 @@ data Kana : Set where
   、_ : Kana → Kana
   。 : Kana
 
+data Formality : Set where
+  Casual : Formality
+  Formal : Formality
+
+data Politeness : Set where
+  Plain : Politeness
+  Polite : Politeness
+
+data Tense : Set where
+  Past : Tense
+  NonPast : Tense
+
+data Mood : Set where
+  Positive : Mood
+  Negative : Mood
+
+record Style : Set where
+  field
+    politeness : Politeness
+    formality : Formality
+    tense : Tense
+    mood : Mood
+
+data Verb : Set where
+  Ichidan : Verb
+  Godan : Verb
+
+data Adjective : Set where
+  い-adj : Adjective
+  な-adj : Adjective
+
 ex : Kana
 ex = わ た し の な ま え は ケ イ で す 。
