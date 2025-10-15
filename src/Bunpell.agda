@@ -49,3 +49,6 @@ data Kana : Set where
 
   、_ : Kana → Kana
   。 : Kana
+
+ex : Kana
+ex = わ た し の な ま え は ケ イ で す 。
