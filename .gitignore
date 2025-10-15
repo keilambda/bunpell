@@ -35,3 +35,6 @@ cabal.project.local~
 *.tix
 
 coverage/
+
+*.agdai
+MAlonzo/**
