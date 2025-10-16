@@ -73,13 +73,51 @@ record Style : Set where
     tense : Tense
     mood : Mood
 
+open Style
+
+data HasEnding : Kana → Kana → Set where
+  here : ∀ {tail} → HasEnding tail tail
+  there : ∀ {tail whole} (k : Kana → Kana) → HasEnding whole tail → HasEnding (k whole) tail
+
+infixr 6 _▷_
+_▷_ : ∀ {w t} (k : Kana → Kana) → HasEnding w t → HasEnding (k w) t
+_▷_ = there
+
+attach : ∀ {w t} → HasEnding w t → Kana → Kana
+attach here new = new
+attach (there k p) new = k (attach p new)
+
 data Verb : Set where
-  Ichidan : Verb
-  Godan : Verb
+  Ichidan : (k : Kana) → HasEnding k (る 。) → Verb
+  Godan : Kana → Verb
+
+conjugate-verb : Style → Verb → Kana
+conjugate-verb s (Ichidan k p) with politeness s | tense s | mood s
+... | Plain  | Past    | Positive = attach p (た 。)
+... | Plain  | Past    | Negative = attach p (な か っ た 。)
+... | Plain  | NonPast | Positive = attach p (る 。)
+... | Plain  | NonPast | Negative = attach p (な い 。)
+... | Polite | Past    | Positive = attach p (ま し た 。)
+... | Polite | Past    | Negative = attach p (ま せ ん で し た 。)
+... | Polite | NonPast | Positive = attach p (ま す 。)
+... | Polite | NonPast | Negative = attach p (ま せ ん 。)
+conjugate-verb s (Godan k) = 。
 
 data Adjective : Set where
   い-adj : Adjective
   な-adj : Adjective
 
-ex : Kana
-ex = わ た し の な ま え は ケ イ で す 。
+module Playground where
+  taberu : Kana
+  taberu = た べ る 。
+
+  taberu-ending : HasEnding taberu (る 。)
+  taberu-ending = た_ ▷ べ_ ▷ here
+
+  oki-con : Kana
+  oki-con = conjugate-verb
+    record { politeness = Polite; formality = Formal; tense = Past; mood = Negative }
+    (Ichidan taberu taberu-ending)
+
+  ex : Kana
+  ex = わ た し の な ま え は ケ イ で す 。
