@@ -83,12 +83,16 @@ infixr 6 _▷_
 _▷_ : ∀ {w t} (k : Kana → Kana) → HasEnding w t → HasEnding (k w) t
 _▷_ = there
 
+infix 4 _-る
+_-る : Kana → Set
+k -る = HasEnding k (る 。)
+
 attach : ∀ {w t} → HasEnding w t → Kana → Kana
 attach here new = new
 attach (there k p) new = k (attach p new)
 
 data Verb : Set where
-  Ichidan : (k : Kana) → HasEnding k (る 。) → Verb
+  Ichidan : (k : Kana) → k -る → Verb
   Godan : Kana → Verb
 
 conjugate-verb : Style → Verb → Kana
@@ -111,7 +115,7 @@ module Playground where
   taberu : Kana
   taberu = た べ る 。
 
-  taberu-ending : HasEnding taberu (る 。)
+  taberu-ending : taberu -る
   taberu-ending = た_ ▷ べ_ ▷ here
 
   oki-con : Kana
