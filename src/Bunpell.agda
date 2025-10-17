@@ -87,13 +87,53 @@ infix 4 _-る
 _-る : Kana → Set
 k -る = HasEnding k (る 。)
 
+infix 4 _-く
+_-く : Kana → Set
+k -く = HasEnding k (く 。)
+
+infix 4 _-ぐ
+_-ぐ : Kana → Set
+k -ぐ = HasEnding k (ぐ 。)
+
+infix 4 _-す
+_-す : Kana → Set
+k -す = HasEnding k (す 。)
+
+infix 4 _-つ
+_-つ : Kana → Set
+k -つ = HasEnding k (つ 。)
+
+infix 4 _-ぬ
+_-ぬ : Kana → Set
+k -ぬ = HasEnding k (ぬ 。)
+
+infix 4 _-ぶ
+_-ぶ : Kana → Set
+k -ぶ = HasEnding k (ぶ 。)
+
+infix 4 _-む
+_-む : Kana → Set
+k -む = HasEnding k (む 。)
+
+infix 4 _-う
+_-う : Kana → Set
+k -う = HasEnding k (う 。)
+
 attach : ∀ {w t} → HasEnding w t → Kana → Kana
 attach here new = new
 attach (there k p) new = k (attach p new)
 
 data Verb : Set where
   Ichidan : (k : Kana) → k -る → Verb
-  Godan : Kana → Verb
+  Godan-K : (k : Kana) → k -く → Verb
+  Godan-G : (k : Kana) → k -ぐ → Verb
+  Godan-S : (k : Kana) → k -す → Verb
+  Godan-T : (k : Kana) → k -つ → Verb
+  Godan-N : (k : Kana) → k -ぬ → Verb
+  Godan-B : (k : Kana) → k -ぶ → Verb
+  Godan-M : (k : Kana) → k -む → Verb
+  Godan-R : (k : Kana) → k -る → Verb
+  Godan-W : (k : Kana) → k -う → Verb
 
 conjugate-verb : Style → Verb → Kana
 conjugate-verb s (Ichidan k p) with politeness s | tense s | mood s
@@ -105,7 +145,15 @@ conjugate-verb s (Ichidan k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (ま す 。)
 ... | Polite | NonPast | Negative = attach p (ま せ ん 。)
-conjugate-verb s (Godan k) = 。
+conjugate-verb s (Godan-K k p) = 。
+conjugate-verb s (Godan-G k p) = 。
+conjugate-verb s (Godan-S k p) = 。
+conjugate-verb s (Godan-T k p) = 。
+conjugate-verb s (Godan-N k p) = 。
+conjugate-verb s (Godan-B k p) = 。
+conjugate-verb s (Godan-M k p) = 。
+conjugate-verb s (Godan-R k p) = 。
+conjugate-verb s (Godan-W k p) = 。
 
 data Adjective : Set where
   い-adj : Adjective
