@@ -184,7 +184,15 @@ conjugate-verb s (Godan-T k p) with politeness s | tense s | mood s
 conjugate-verb s (Godan-N k p) = 。
 conjugate-verb s (Godan-B k p) = 。
 conjugate-verb s (Godan-M k p) = 。
-conjugate-verb s (Godan-R k p) = 。
+conjugate-verb s (Godan-R k p) with politeness s | tense s | mood s
+... | Plain  | Past    | Positive = attach p (っ た 。)
+... | Plain  | Past    | Negative = attach p (ら な か っ た 。)
+... | Plain  | NonPast | Positive = k
+... | Plain  | NonPast | Negative = attach p (ら な い 。)
+... | Polite | Past    | Positive = attach p (り ま し た 。)
+... | Polite | Past    | Negative = attach p (り ま せ ん で し た 。)
+... | Polite | NonPast | Positive = attach p (り ま す 。)
+... | Polite | NonPast | Negative = attach p (り ま せ ん 。)
 conjugate-verb s (Godan-W k p) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (っ た 。)
 ... | Plain  | Past    | Negative = attach p (わ な か っ た 。)
