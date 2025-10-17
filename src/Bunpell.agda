@@ -1,5 +1,7 @@
 module Bunpell where
 
+open import Data.Product
+
 data Kana : Set where
   あ_ い_ う_ え_ お_ : Kana → Kana
   か_ き_ く_ け_ こ_ : Kana → Kana
@@ -83,60 +85,57 @@ infixr 6 _▷_
 _▷_ : ∀ {w t} (k : Kana → Kana) → HasEnding w t → HasEnding (k w) t
 _▷_ = there
 
-infix 4 _-る
-_-る : Kana → Set
-k -る = HasEnding k (る 。)
+Suffix : Kana → Set
+Suffix t = Σ Kana (λ w → HasEnding w t)
 
-infix 4 _-く
-_-く : Kana → Set
-k -く = HasEnding k (く 。)
+-る : Set
+-る = Suffix (る 。)
 
-infix 4 _-ぐ
-_-ぐ : Kana → Set
-k -ぐ = HasEnding k (ぐ 。)
+-く : Set
+-く = Suffix (く 。)
 
-infix 4 _-す
-_-す : Kana → Set
-k -す = HasEnding k (す 。)
+-ぐ : Set
+-ぐ = Suffix (ぐ 。)
 
-infix 4 _-つ
-_-つ : Kana → Set
-k -つ = HasEnding k (つ 。)
+-す : Set
+-す = Suffix (す 。)
 
-infix 4 _-ぬ
-_-ぬ : Kana → Set
-k -ぬ = HasEnding k (ぬ 。)
+-つ : Set
+-つ = Suffix (つ 。)
 
-infix 4 _-ぶ
-_-ぶ : Kana → Set
-k -ぶ = HasEnding k (ぶ 。)
+-ぬ : Set
+-ぬ = Suffix (ぬ 。)
 
-infix 4 _-む
-_-む : Kana → Set
-k -む = HasEnding k (む 。)
+-ぶ : Set
+-ぶ = Suffix (ぶ 。)
 
-infix 4 _-う
-_-う : Kana → Set
-k -う = HasEnding k (う 。)
+-む : Set
+-む = Suffix (む 。)
+
+-う : Set
+-う = Suffix (う 。)
 
 attach : ∀ {w t} → HasEnding w t → Kana → Kana
 attach here new = new
 attach (there k p) new = k (attach p new)
 
+suffix : ∀ {w t} → HasEnding w t → Suffix t
+suffix {w} {t} p = w , p
+
 data Verb : Set where
-  Ichidan : (k : Kana) → k -る → Verb
-  Godan-K : (k : Kana) → k -く → Verb
-  Godan-G : (k : Kana) → k -ぐ → Verb
-  Godan-S : (k : Kana) → k -す → Verb
-  Godan-T : (k : Kana) → k -つ → Verb
-  Godan-N : (k : Kana) → k -ぬ → Verb
-  Godan-B : (k : Kana) → k -ぶ → Verb
-  Godan-M : (k : Kana) → k -む → Verb
-  Godan-R : (k : Kana) → k -る → Verb
-  Godan-W : (k : Kana) → k -う → Verb
+  Ichidan : -る → Verb
+  Godan-K : -く → Verb
+  Godan-G : -ぐ → Verb
+  Godan-S : -す → Verb
+  Godan-T : -つ → Verb
+  Godan-N : -ぬ → Verb
+  Godan-B : -ぶ → Verb
+  Godan-M : -む → Verb
+  Godan-R : -る → Verb
+  Godan-W : -う → Verb
 
 conjugate-verb : Style → Verb → Kana
-conjugate-verb s (Ichidan k p) with politeness s | tense s | mood s
+conjugate-verb s (Ichidan (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (た 。)
 ... | Plain  | Past    | Negative = attach p (な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -145,7 +144,7 @@ conjugate-verb s (Ichidan k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (ま す 。)
 ... | Polite | NonPast | Negative = attach p (ま せ ん 。)
-conjugate-verb s (Godan-K k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-K (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (い た 。)
 ... | Plain  | Past    | Negative = attach p (か な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -154,7 +153,7 @@ conjugate-verb s (Godan-K k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (き ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (き ま す 。)
 ... | Polite | NonPast | Negative = attach p (き ま せ ん 。)
-conjugate-verb s (Godan-G k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-G (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (い だ 。)
 ... | Plain  | Past    | Negative = attach p (が な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -163,7 +162,7 @@ conjugate-verb s (Godan-G k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (ぎ ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (ぎ ま す 。)
 ... | Polite | NonPast | Negative = attach p (ぎ ま せ ん 。)
-conjugate-verb s (Godan-S k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-S (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (し た 。)
 ... | Plain  | Past    | Negative = attach p (さ な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -172,7 +171,7 @@ conjugate-verb s (Godan-S k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (し ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (し ま す 。)
 ... | Polite | NonPast | Negative = attach p (し ま せ ん 。)
-conjugate-verb s (Godan-T k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-T (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (っ た 。)
 ... | Plain  | Past    | Negative = attach p (た な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -181,7 +180,7 @@ conjugate-verb s (Godan-T k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (ち ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (ち ま す 。)
 ... | Polite | NonPast | Negative = attach p (ち ま せ ん 。)
-conjugate-verb s (Godan-N k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-N (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (ん だ 。)
 ... | Plain  | Past    | Negative = attach p (な な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -190,7 +189,7 @@ conjugate-verb s (Godan-N k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (に ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (に ま す 。)
 ... | Polite | NonPast | Negative = attach p (に ま せ ん 。)
-conjugate-verb s (Godan-B k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-B (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (ん だ 。)
 ... | Plain  | Past    | Negative = attach p (ば な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -199,7 +198,7 @@ conjugate-verb s (Godan-B k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (び ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (び ま す 。)
 ... | Polite | NonPast | Negative = attach p (び ま せ ん 。)
-conjugate-verb s (Godan-M k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-M (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (ん だ 。)
 ... | Plain  | Past    | Negative = attach p (ま な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -208,7 +207,7 @@ conjugate-verb s (Godan-M k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (み ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (み ま す 。)
 ... | Polite | NonPast | Negative = attach p (み ま せ ん 。)
-conjugate-verb s (Godan-R k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-R (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (っ た 。)
 ... | Plain  | Past    | Negative = attach p (ら な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -217,7 +216,7 @@ conjugate-verb s (Godan-R k p) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (り ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (り ま す 。)
 ... | Polite | NonPast | Negative = attach p (り ま せ ん 。)
-conjugate-verb s (Godan-W k p) with politeness s | tense s | mood s
+conjugate-verb s (Godan-W (k , p)) with politeness s | tense s | mood s
 ... | Plain  | Past    | Positive = attach p (っ た 。)
 ... | Plain  | Past    | Negative = attach p (わ な か っ た 。)
 ... | Plain  | NonPast | Positive = k
@@ -232,16 +231,13 @@ data Adjective : Set where
   な-adj : Adjective
 
 module Playground where
-  taberu : Kana
-  taberu = た べ る 。
-
-  taberu-ending : taberu -る
-  taberu-ending = た_ ▷ べ_ ▷ here
+  taberu : -る
+  taberu = suffix (た_ ▷ べ_ ▷ here)
 
   oki-con : Kana
   oki-con = conjugate-verb
     record { politeness = Polite; formality = Formal; tense = Past; mood = Negative }
-    (Ichidan taberu taberu-ending)
+    (Ichidan taberu)
 
   ex : Kana
   ex = わ た し の な ま え は ケ イ で す 。
