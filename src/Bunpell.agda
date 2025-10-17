@@ -77,16 +77,16 @@ record Style : Set where
 
 open Style
 
-data HasEnding : Kana → Kana → Set where
-  here : ∀ {tail} → HasEnding tail tail
-  there : ∀ {tail whole} (k : Kana → Kana) → HasEnding whole tail → HasEnding (k whole) tail
+data HasSuffix : Kana → Kana → Set where
+  here : ∀ {tail} → HasSuffix tail tail
+  there : ∀ {tail whole} (k : Kana → Kana) → HasSuffix whole tail → HasSuffix (k whole) tail
 
 infixr 6 _▷_
-_▷_ : ∀ {w t} (k : Kana → Kana) → HasEnding w t → HasEnding (k w) t
+_▷_ : ∀ {w t} (k : Kana → Kana) → HasSuffix w t → HasSuffix (k w) t
 _▷_ = there
 
 Suffix : Kana → Set
-Suffix t = Σ Kana (λ w → HasEnding w t)
+Suffix t = Σ Kana (λ w → HasSuffix w t)
 
 -る : Set
 -る = Suffix (る 。)
@@ -115,11 +115,11 @@ Suffix t = Σ Kana (λ w → HasEnding w t)
 -う : Set
 -う = Suffix (う 。)
 
-attach : ∀ {w t} → HasEnding w t → Kana → Kana
+attach : ∀ {w t} → HasSuffix w t → Kana → Kana
 attach here new = new
 attach (there k p) new = k (attach p new)
 
-suffix : ∀ {w t} → HasEnding w t → Suffix t
+suffix : ∀ {w t} → HasSuffix w t → Suffix t
 suffix {w} {t} p = w , p
 
 data Verb : Set where
