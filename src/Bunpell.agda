@@ -115,6 +115,12 @@ Suffix t = Σ Kana (λ w → HasSuffix w t)
 -う : Set
 -う = Suffix (う 。)
 
+-い : Set
+-い = Suffix (い 。)
+
+-な : Set
+-な = Suffix (な 。)
+
 attach : ∀ {w t} → HasSuffix w t → Kana → Kana
 attach here new = new
 attach (there k p) new = k (attach p new)
@@ -227,8 +233,12 @@ conjugate-verb s (Godan-W (k , p)) with politeness s | tense s | mood s
 ... | Polite | NonPast | Negative = attach p (い ま せ ん 。)
 
 data Adjective : Set where
-  い-adj : Adjective
-  な-adj : Adjective
+  い-adj : -い → Adjective
+  な-adj : -な → Adjective
+
+conjugate-adjective : Style → Adjective → Kana
+conjugate-adjective s (い-adj (k , p)) = 。
+conjugate-adjective s (な-adj (k , p)) = 。
 
 module Playground where
   taberu : -る
