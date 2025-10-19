@@ -121,6 +121,12 @@ Suffix t = Σ Kana (λ w → HasSuffix w t)
 -な : Set
 -な = Suffix (な 。)
 
+-くる : Set
+-くる = Suffix (く る 。)
+
+-する : Set
+-する = Suffix (す る 。)
+
 attach : ∀ {w t} → HasSuffix w t → Kana → Kana
 attach here new = new
 attach (there k p) new = k (attach p new)
@@ -139,6 +145,8 @@ data Verb : Set where
   Godan-M : -む → Verb
   Godan-R : -る → Verb
   Godan-W : -う → Verb
+  Kahen : -くる → Verb
+  Sahen : -する → Verb
 
 conjugate-verb : Style → Verb → Kana
 conjugate-verb s (Ichidan (k , p)) with politeness s | tense s | mood s
@@ -231,6 +239,8 @@ conjugate-verb s (Godan-W (k , p)) with politeness s | tense s | mood s
 ... | Polite | Past    | Negative = attach p (い ま せ ん で し た 。)
 ... | Polite | NonPast | Positive = attach p (い ま す 。)
 ... | Polite | NonPast | Negative = attach p (い ま せ ん 。)
+conjugate-verb s (Kahen (k , p)) = 。
+conjugate-verb s (Sahen (k , p)) = 。
 
 data Adjective : Set where
   い-adj : -い → Adjective
