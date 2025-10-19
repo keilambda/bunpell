@@ -120,7 +120,7 @@ attach here new = new
 attach (there k p) new = k (attach p new)
 
 suffix : ∀ {w t} → HasSuffix w t → Suffix t
-suffix {w} {t} p = w , p
+suffix {w} p = w , p
 
 data Verb : Set where
   Ichidan : -る → Verb
@@ -234,8 +234,8 @@ module Playground where
   taberu : -る
   taberu = suffix (た_ ▷ べ_ ▷ here)
 
-  oki-con : Kana
-  oki-con = conjugate-verb
+  taberu-con : Kana
+  taberu-con = conjugate-verb
     record { politeness = Polite; formality = Formal; tense = Past; mood = Negative }
     (Ichidan taberu)
 
